@@ -1,0 +1,23 @@
+# Load dataset
+data <- read.csv("NorthenHemis.csv")  # Adjust path as needed
+
+# Filter data for each period
+subset_1951_1980 <- subset(data, Year >= 1951 & Year <= 1980)
+subset_1981_2010 <- subset(data, Year >= 1981 & Year <= 2010)
+
+# Extract anomalies
+anomalies_1951_1980 <- subset_1951_1980$Anomaly  
+anomalies_1981_2010 <- subset_1981_2010$Anomaly  
+
+# Compute 7th decile from 1951–1980
+hot_threshold <- quantile(anomalies_1951_1980, probs = 0.7, na.rm = TRUE)
+
+# Count 'hot' anomalies in 1981–2010
+hot_count <- sum(anomalies_1981_2010 > hot_threshold, na.rm = TRUE)
+total_count <- length(anomalies_1981_2010)
+
+# Compute percentage
+hot_percentage <- (hot_count / total_count) * 100
+
+# Print result
+print(hot_percentage)
